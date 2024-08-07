@@ -1,6 +1,9 @@
 -- Write a SQL script that creates a table users following these requirements
 
+DROP TABLE IF EXISTS users;
 CREATE TABLE users (
-	id INT AUTO_INCREMENT PRIMARY KEY,
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	email VARCHAR(255) NOT NULL UNIQUE,
-	name VARCHAR(255) NOT NUL:L
+	name VARCHAR(255),
+	country ENUM('US', 'CO', 'TN') NOT NULL DEFAULT 'US'
+);
