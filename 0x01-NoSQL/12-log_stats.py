@@ -38,7 +38,7 @@ def check_nginx():
 
     for one_method in method:
         result = nginx_collection.count_documents({"method": one_method})
-        print(f"\tmethod {one_method}: {result}")
+        print(f"    method {one_method}: {result}")
     status_check = nginx_collection.count_documents(
             {"method": "GET", "path": "/status"}
     )
