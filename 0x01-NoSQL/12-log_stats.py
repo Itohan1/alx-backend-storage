@@ -30,19 +30,14 @@ if __name__ == "__main__":
 
     first_result = nginx_collection.count_documents({})
 
-    second_result = nginx_collection.count_documents({"method": "GET"})
-    post_result = nginx_collection.count_documents({"method": "POST"})
-    put_result = nginx_collection.count_documents({"method": "PUT"})
-    patch_result = nginx_collection.count_documents({"method": "PATCH"})
-    delete_result = nginx_collection.count_documents({"method": "DELETE"})
+    method = ["GET", "POST", "PUT", "PATCH", "DELETE"]
 
     print(f"{first_result} logs")
     print("Methods:")
-    print(f"\tmethod GET: {second_result}")
-    print(f"\tmethod POST: {post_result}")
-    print(f"\tmethod PUT: {put_result}")
-    print(f"\tmethod PATCH: {patch_result}")
-    print(f"\tmethod DELETE: {delete_result}")
+
+    for one_method in method:
+        result = nginx_collection.count_documents({"method": one_method})
+        print(f"\tmethod {one_method}: {result}")
     status_check = nginx_collection.count_documents(
             {"method": "GET", "path": "/status"}
     )
