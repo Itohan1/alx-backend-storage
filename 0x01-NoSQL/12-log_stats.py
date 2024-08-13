@@ -23,9 +23,7 @@
 """
 from pymongo import MongoClient
 
-
-def check_nginx():
-    """Check method count"""
+if __name__ == "__main__":
     client = MongoClient('mongodb://127.0.0.1:27017')
     nginx_collection = client.logs.nginx
 
@@ -38,12 +36,9 @@ def check_nginx():
 
     for one_method in method:
         result = nginx_collection.count_documents({"method": one_method})
-        print(f"\t method {one_method}: {result}")
+        print(f"\tmethod {one_method}: {result}")
     status_check = nginx_collection.count_documents(
             {"method": "GET", "path": "/status"}
     )
     print(f"{status_check} status check")
 
-
-if __name__ == "__main__":
-    check_nginx()
