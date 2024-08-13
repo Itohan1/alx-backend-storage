@@ -24,7 +24,8 @@
 from pymongo import MongoClient
 
 
-if __name__ == "__main__":
+def check_nginx():
+    """Check method count"""
     client = MongoClient('mongodb://127.0.0.1:27017')
     nginx_collection = client.logs.nginx
 
@@ -42,3 +43,7 @@ if __name__ == "__main__":
             {"method": "GET", "path": "/status"}
     )
     print(f"{status_check} status check")
+
+
+if __name__ == "__main__":
+    check_nginx()
