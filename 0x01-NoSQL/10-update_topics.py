@@ -8,7 +8,7 @@
    (mongo_collection, name, topics):
    mongo_collection will be
    the pymongo collection object
-   
+
    name (string) will be the
    school name to update
 
@@ -18,8 +18,9 @@
 
 
 def update_topics(mongo_collection, name, topics):
-    """"""
+    """mongo_collection will be the pymongo collection object"""
 
-    result = mongo_collection.update_many({'name': name }, {'$set': {'topics': topics} }
+    result = mongo_collection.update_many(
+            {'name': name},
+            {'$set': {'topics': topics}}
     )
-
