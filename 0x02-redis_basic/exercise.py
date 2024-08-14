@@ -18,7 +18,7 @@
    Remember that data can be a
    str, bytes, int or float
 """
-from typing import Union
+from typing import Union, Callable, Optional
 import redis
 import uuid
 
@@ -38,3 +38,27 @@ class Cache:
         key = str(uuid.uuid4())
         self._redis.set(key, data)
         return key
+
+    def get(self, key: str, fn: Optional[Callable] = None
+            ) -> Optional[Union[str, bytes, int, float]]:
+        """Retrive the desired format with callable function"""
+
+        data = self._redis.get(key)
+
+        if not data:
+            return None
+
+        if fn:
+            return fn(data)
+
+        return data
+
+    def get_str(self, key: str) -> Optional[str]:
+        """The return value of the desired format is a string"""
+
+        return self.get(key, fn=lambda d: d.decode("utf-8"))
+
+    def get_int(self, key: str) -> Optional[int]:
+        """The return value of the desired format is an integer"""
+
+        return self.get(key, fn=int)
