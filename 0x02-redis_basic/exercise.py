@@ -51,6 +51,23 @@ def call_history(method: Callable) -> Callable:
     return wrapper
 
 
+def replay(method: Callable) -> map:
+    """display a method used"""
+
+    self = method.__self__
+    inputs = self._redis.lrange("{}:inputs".format(method.__qualname__), 0, -1)
+    outputs = self._redis.lrange("{}:outputs".format(
+        method.__qualname__), 0, -1)
+    get_calls = int(self._redis.get(method.__qualname__))
+    if get_calls is None:
+        get_calls = 0
+    print(f"{method.__qualname__} was called {get_calls} times:")
+    for i, j in zip(inputs, outputs):
+        i = i.decode('utf-8')
+        j = j.decode('utf-8')
+        print(f"{method.__qualname__}(*{i}) -> {j}")
+
+
 class Cache:
     """python interraction with reddit"""
 
