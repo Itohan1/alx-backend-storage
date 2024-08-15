@@ -18,7 +18,7 @@
    Remember that data can be a
    str, bytes, int or float
 """
-from typing import Union, Callable, Optional
+from typing import Union, Callable, Optional, Any
 import redis
 import uuid
 import functools
@@ -35,6 +35,22 @@ def count_calls(method: Callable) -> Callable:
     return wrapper
 
 
+def call_history(method: Callable) -> Callable:
+    """Check input and outputs"""
+
+    @functools.wraps(method)
+    def wrapper(self, *args) -> Any:
+        """Modify the method"""
+        outputs = f"{method.__qualname__}:outputs"
+        input_key = f"{method.__qualname__}:inputs"
+
+        self._redis.lpush(input_key, str(*args))
+        result = method(self, *args)
+        self._redis.rpush(outputs, str(result))
+        return result
+    return wrapper
+
+
 class Cache:
     """python interraction with reddit"""
 
@@ -45,6 +61,7 @@ class Cache:
         self._redis.flushdb()
 
     @count_calls
+    @call_history
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """returns the unique identify for storaging data"""
 
