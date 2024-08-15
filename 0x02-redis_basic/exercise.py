@@ -42,9 +42,9 @@ def call_history(method: Callable) -> Callable:
     def wrapper(self, *args) -> Any:
         """Modify the method"""
         outputs = f"{method.__qualname__}:outputs"
-        input_key = f"{method.__qualname__}:inputs"
+        inputs = f"{method.__qualname__}:inputs"
 
-        self._redis.lpush(input_key, str(*args))
+        self._redis.lpush(inputs, str(*args))
         result = method(self, *args)
         self._redis.rpush(outputs, str(result))
         return result
