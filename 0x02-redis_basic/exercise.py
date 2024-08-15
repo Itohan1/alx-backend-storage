@@ -44,7 +44,7 @@ def call_history(method: Callable) -> Callable:
         outputs = f"{method.__qualname__}:outputs"
         inputs = f"{method.__qualname__}:inputs"
 
-        self._redis.lpush(inputs, str(*args))
+        self._redis.rpush(inputs, str(args))
         result = method(self, *args)
         self._redis.rpush(outputs, str(result))
         return result
