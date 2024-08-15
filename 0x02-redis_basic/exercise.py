@@ -21,6 +21,18 @@
 from typing import Union, Callable, Optional
 import redis
 import uuid
+import functools
+
+
+def count_calls(method: Callable) -> Callable:
+    """Count calls"""
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        """modifies the functionality of a class method"""
+        key = method.__qualname__
+        count = self._redis.incr(key)
+        return method(self, *args, **kwargs)
+    return wrapper
 
 
 class Cache:
@@ -32,6 +44,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """returns the unique identify for storaging data"""
 
